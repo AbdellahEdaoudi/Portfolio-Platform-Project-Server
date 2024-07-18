@@ -27,10 +27,16 @@ const getUserById = async (req, res) => {
   }
 };
 
-// Create a new user
 const createUser = async (req, res) => {
   const userData = req.body;
+  
   try {
+    // Check if the username already exists
+    const existingUser = await User.findOne({ username: userData.username });
+    if (existingUser) {
+      return res.status(400).json({ error: 'Username already exists' });
+    }
+
     const newUser = await User.create(userData);
     res.json(newUser);
   } catch (error) {
@@ -38,19 +44,28 @@ const createUser = async (req, res) => {
   }
 };
 
+
 // Update user by ID
 const updateUserById = async (req, res) => {
   const { id } = req.params;
   const userData = req.body;
-  
+
   try {
+    // Check if the username already exists
+    if (userData.username) {
+      const existingUser = await User.findOne({ username: userData.username });
+      if (existingUser && existingUser._id.toString() !== id) {
+        return res.status(400).json({ error: 'Username already exists' });
+      }
+    }
+
     // Check if there's a file to upload
     if (req.file) {
       const result = await cloudinary.uploader.upload(req.file.path);
       userData.urlimage = result.secure_url;
     }
 
-    const updatedUser = await User.findByIdAndUpdate({_id: id}, userData, { new: true });
+    const updatedUser = await User.findByIdAndUpdate(id, userData, { new: true });
     if (!updatedUser) {
       return res.status(404).json({ message: 'User not found' });
     }
