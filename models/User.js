@@ -6,6 +6,8 @@ const UserSchema = new mongoose.Schema({
   username: { type: String, trim: true, unique: true },
   phoneNumber: { type: String, trim: true },
   country: { type: String, trim: true },
+  languages: { type: String, trim: true },
+  services: { type: String, trim: true },
   urlimage: { type: String, trim: true },
   isOnline: { type: Boolean, default: false },
   bio: { type: String, trim: true },

@@ -28,7 +28,7 @@ const upload = require('./middleware/multer');
 app.use(cors());
 const io = socketIo(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "*",
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
   }
 });
@@ -81,7 +81,7 @@ mongoose.connect(process.env.MONGO_URL)
 app.get('/users', UserController.getUsers);
 app.get('/users/:id', UserController.getUserById);
 app.get('/usersE/:email', UserController.getUserByEmail);
-app.get('/user/:username/:id', UserController.getUserByFullname);
+app.get('/user/:username', UserController.getUserByFullname);
 app.post('/users', UserController.createUser);
 app.put('/users/:id', upload.single('urlimage'),UserController.updateUserById);
 app.put('/usersE/:email', UserController.updateUserByEmail);

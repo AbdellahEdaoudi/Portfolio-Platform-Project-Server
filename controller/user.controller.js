@@ -121,10 +121,10 @@ const getUserByEmail = async (req, res) => {
 
 // Get user by fullname
 const getUserByFullname = async (req, res) => {
-  const { username, id } = req.params;
+  const {username} = req.params;
 
   try {
-    const user = await User.findOne({ username, _id: id });
+    const user = await User.findOne({username});
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
