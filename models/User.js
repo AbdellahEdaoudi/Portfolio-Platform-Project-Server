@@ -11,6 +11,7 @@ const UserSchema = new mongoose.Schema({
   urlimage: { type: String, trim: true },
   isOnline: { type: Boolean, default: false },
   bio: { type: String, trim: true },
+  category: { type: String, trim: true },
   fb: { type: String, trim: true },
   whatsapp: { type: String, trim: true },
   messenger: { type: String, trim: true },

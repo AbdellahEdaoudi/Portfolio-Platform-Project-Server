@@ -28,7 +28,7 @@ const upload = require('./middleware/multer');
 app.use(cors());
 const io = socketIo(server, {
   cors: {
-    origin: "*",
+    origin: "https://chatfloww.vercel.app",
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
   }
 });
@@ -61,7 +61,7 @@ server.listen(PORT, () => {
 });
 
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'https://chatfloww.vercel.app');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   res.setHeader('Access-Control-Allow-Credentials', 'true');
@@ -77,7 +77,7 @@ mongoose.connect(process.env.MONGO_URL)
   });
 
 
-// Routes
+// User Routes
 app.get('/users', UserController.getUsers);
 app.get('/users/:id', UserController.getUserById);
 app.get('/usersE/:email', UserController.getUserByEmail);
