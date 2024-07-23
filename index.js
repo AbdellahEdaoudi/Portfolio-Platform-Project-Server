@@ -37,7 +37,6 @@ const io = socketIo(server, {
 io.on('connection', (socket) => {
   console.log(`A user connected with id: ${socket.id}.`);
 
-
   socket.on('sendMessage', (data) => {
     io.emit('receiveMessage', data);
   });
