@@ -28,7 +28,7 @@ const upload = require('./middleware/multer');
 app.use(cors());
 const io = socketIo(server, {
   cors: {
-    origin: "https://chatfloww.vercel.app",
+    origin: "*",
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
   }
 });
@@ -36,6 +36,7 @@ const io = socketIo(server, {
 // Socket.io
 io.on('connection', (socket) => {
   console.log(`A user connected with id: ${socket.id}.`);
+
 
   socket.on('sendMessage', (data) => {
     io.emit('receiveMessage', data);
@@ -60,7 +61,7 @@ server.listen(PORT, () => {
 });
 
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', 'https://chatfloww.vercel.app');
+  res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   res.setHeader('Access-Control-Allow-Credentials', 'true');
