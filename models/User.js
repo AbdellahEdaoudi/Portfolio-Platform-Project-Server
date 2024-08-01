@@ -27,6 +27,7 @@ const UserSchema = new mongoose.Schema({
   bgcolorp: { type: String, trim: true },
   skills: { type: String, trim: true },
   education: { type: String, trim: true },
+  experience: { type: String, trim: true },
   aboni: { type: Boolean, default: false },
 }, { timestamps: true });
 
