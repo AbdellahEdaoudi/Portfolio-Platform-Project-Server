@@ -12,6 +12,9 @@ const User = require('./models/User');
 const server = http.createServer(app);
 const cors = require('cors');
 const upload = require('./middleware/multer');
+const { createLink, getAllLinks, getLinkById, updateLink, deleteLink } = require('./controller/links.controller');
+const Links = require('./models/Links');
+
 // const { createClient } = require('redis');
 
 // // TEST REDIS
@@ -94,3 +97,19 @@ app.post('/messages', MessageController.createMessage);
 app.put('/messages/:id', MessageController.updateMessageById);
 app.delete('/messages/:id', MessageController.deleteMessageById);
 app.delete('/messages', MessageController.deleteAllMessages);
+
+// Links route 
+app.get('/links', getAllLinks);
+app.get('/links/:id', getLinkById);
+app.post('/links', createLink);
+app.put('/links/:id', updateLink);
+app.delete('/links/:id', deleteLink);
+
+app.delete("/d", async (req, res) => {
+  try {
+    const result = await Links.deleteMany({});
+    res.status(200).json({ message: "All links have been deleted.", result });
+  } catch (error) {
+    res.status(500).json({ message: "An error occurred while deleting links.", error });
+  }
+});
