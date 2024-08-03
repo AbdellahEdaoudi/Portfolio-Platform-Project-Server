@@ -6,13 +6,13 @@ app.use(express.json());
 const PORT = 9999;
 const UserController = require("./controller/user.controller")
 const MessageController = require("./controller/msg.controller")
+const LinksController = require("./controller/links.controller")
 const http = require('http');
 const socketIo = require('socket.io');
 const User = require('./models/User');
 const server = http.createServer(app);
 const cors = require('cors');
 const upload = require('./middleware/multer');
-const { createLink, getAllLinks, getLinkById, updateLink, deleteLink } = require('./controller/links.controller');
 const Links = require('./models/Links');
 
 // const { createClient } = require('redis');
@@ -99,11 +99,11 @@ app.delete('/messages/:id', MessageController.deleteMessageById);
 app.delete('/messages', MessageController.deleteAllMessages);
 
 // Links route 
-app.get('/links', getAllLinks);
-app.get('/links/:id', getLinkById);
-app.post('/links', createLink);
-app.put('/links/:id', updateLink);
-app.delete('/links/:id', deleteLink);
+app.get('/links', LinksController.getAllLinks);
+app.get('/links/:id', LinksController.getLinkById);
+app.post('/links', LinksController.createLink);
+app.put('/links/:id', LinksController.updateLink);
+app.delete('/links/:id', LinksController.deleteLink);
 
 app.delete("/d", async (req, res) => {
   try {
