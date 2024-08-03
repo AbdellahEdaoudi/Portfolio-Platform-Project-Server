@@ -1,15 +1,6 @@
 const Links = require('../models/Links');
 
-// Create a new link
-const createLink = async (req, res) => {
-  try {
-    const newLink = new Links(req.body);
-    await newLink.save();
-    res.status(201).json({ message: 'Link created successfully', data: newLink });
-  } catch (error) {
-    res.status(500).json({ message: 'Error creating link', error: error.message });
-  }
-};
+
 
 // Get all links
 const getAllLinks = async (req, res) => {
@@ -31,6 +22,17 @@ const getLinkById = async (req, res) => {
     res.json(link); // Default status code is 200
   } catch (error) {
     res.status(500).json({ message: 'Error fetching link', error: error.message });
+  }
+};
+
+// Create a new link
+const createLink = async (req, res) => {
+  try {
+    const newLink = new Links(req.body);
+    await newLink.save();
+    res.status(201).json({ message: 'Link created successfully', data: newLink });
+  } catch (error) {
+    res.status(500).json({ message: 'Error creating link', error: error.message });
   }
 };
 
