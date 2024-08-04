@@ -11,6 +11,11 @@ const MessageSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+  fromname: {
+    type: String,
+    required: true,
+    trim: true
+  },
   to: {
     type: String,
     required: true,
