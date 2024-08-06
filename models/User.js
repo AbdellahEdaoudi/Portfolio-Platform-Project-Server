@@ -29,6 +29,7 @@ const UserSchema = new mongoose.Schema({
   education: { type: String, trim: true },
   experience: { type: String, trim: true },
   aboni: { type: Boolean, default: false },
+  blocked: { type: Boolean, default: false },
 }, { timestamps: true });
 
 module.exports = mongoose.models.User || mongoose.model('User', UserSchema);

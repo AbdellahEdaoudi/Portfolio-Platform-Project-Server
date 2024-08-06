@@ -7,6 +7,8 @@ const PORT = 9999;
 const UserController = require("./controller/user.controller")
 const MessageController = require("./controller/msg.controller")
 const LinksController = require("./controller/links.controller")
+const ContacteController = require("./controller/contacte.controller")
+const AdmineController = require("./controller/admin.controller")
 const http = require('http');
 const socketIo = require('socket.io');
 const User = require('./models/User');
@@ -14,6 +16,7 @@ const server = http.createServer(app);
 const cors = require('cors');
 const upload = require('./middleware/multer');
 const Links = require('./models/Links');
+const Contact = require('./models/Contacte');
 
 // const { createClient } = require('redis');
 
@@ -105,9 +108,31 @@ app.post('/links', LinksController.createLink);
 app.put('/links/:id', LinksController.updateLink);
 app.delete('/links/:id', LinksController.deleteLink);
 
+// Contact Routes
+app.get('/contacts', ContacteController.getContacts);
+app.get('/contacts/:id', ContacteController.getContactById);
+app.post('/contacts', ContacteController.createContact);
+app.put('/contacts/:id', ContacteController.updateContactById);
+app.delete('/contacts/:id', ContacteController.deleteContactById);
+
+// Admin Routes
+app.post('/register', AdmineController.registerAdmin);
+app.post('/login', AdmineController.loginAdmin);
+app.get('/admin', AdmineController.getAllAdmins);
+app.delete('/admin/:id', AdmineController.deleteAdminById);
+
 app.delete("/d", async (req, res) => {
   try {
     const result = await Links.deleteMany({});
+    res.status(200).json({ message: "All links have been deleted.", result });
+  } catch (error) {
+    res.status(500).json({ message: "An error occurred while deleting links.", error });
+  }
+});
+
+app.delete("/dc", async (req, res) => {
+  try {
+    const result = await Contact.deleteMany({});
     res.status(200).json({ message: "All links have been deleted.", result });
   } catch (error) {
     res.status(500).json({ message: "An error occurred while deleting links.", error });
