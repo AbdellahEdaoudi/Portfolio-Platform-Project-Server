@@ -17,6 +17,7 @@ const cors = require('cors');
 const upload = require('./middleware/multer');
 const Links = require('./models/Links');
 const Contact = require('./models/Contacte');
+const Messages = require('./models/Messages');
 
 // const { createClient } = require('redis');
 
@@ -121,7 +122,7 @@ app.post('/login', AdmineController.loginAdmin);
 app.get('/admin', AdmineController.getAllAdmins);
 app.delete('/admin/:id', AdmineController.deleteAdminById);
 
-app.delete("/d", async (req, res) => {
+app.delete("/dl", async (req, res) => {
   try {
     const result = await Links.deleteMany({});
     res.status(200).json({ message: "All links have been deleted.", result });
@@ -133,7 +134,16 @@ app.delete("/d", async (req, res) => {
 app.delete("/dc", async (req, res) => {
   try {
     const result = await Contact.deleteMany({});
-    res.status(200).json({ message: "All links have been deleted.", result });
+    res.status(200).json({ message: "All Contact have been deleted.", result });
+  } catch (error) {
+    res.status(500).json({ message: "An error occurred while deleting links.", error });
+  }
+});
+
+app.delete("/dm", async (req, res) => {
+  try {
+    const result = await Messages.deleteMany({});
+    res.status(200).json({ message: "All Messages have been deleted.", result });
   } catch (error) {
     res.status(500).json({ message: "An error occurred while deleting links.", error });
   }
