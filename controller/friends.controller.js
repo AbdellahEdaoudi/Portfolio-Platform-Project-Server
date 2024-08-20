@@ -4,6 +4,9 @@ const FriendRequest = require('../models/FriendRequest');
 exports.createFriendRequest = async (req, res) => {
   try {
     const { from, to, status } = req.body;
+    if (!from || !to || !status) {
+      return res.status(400).json({ success: false, error: 'Missing required fields' });
+    }
     const newRequest = new FriendRequest({ from, to, status });
     await newRequest.save();
     res.status(201).json({ success: true, data: newRequest });
