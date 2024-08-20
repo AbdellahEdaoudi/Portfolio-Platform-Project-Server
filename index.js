@@ -9,6 +9,7 @@ const MessageController = require("./controller/msg.controller")
 const LinksController = require("./controller/links.controller")
 const ContacteController = require("./controller/contacte.controller")
 const AdmineController = require("./controller/admin.controller")
+const friendRequestController = require("./controller/friends.controller")
 const http = require('http');
 const socketIo = require('socket.io');
 const User = require('./models/User');
@@ -121,6 +122,13 @@ app.post('/register', AdmineController.registerAdmin);
 app.post('/login', AdmineController.loginAdmin);
 app.get('/admin', AdmineController.getAllAdmins);
 app.delete('/admin/:id', AdmineController.deleteAdminById);
+
+// Friends Routes
+app.post('/friend', friendRequestController.createFriendRequest);
+app.get('/friend', friendRequestController.getAllFriendRequests);
+app.get('/friend/:id', friendRequestController.getFriendRequestById);
+app.put('/friend/:id', friendRequestController.updateFriendRequest);
+app.delete('/friend/:id', friendRequestController.deleteFriendRequest);
 
 app.delete("/dl", async (req, res) => {
   try {
