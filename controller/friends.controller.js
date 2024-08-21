@@ -54,6 +54,29 @@ exports.updateFriendRequest = async (req, res) => {
   }
 };
 
+exports.addFriendRequests = async (req, res) => {
+  const friendRequests = req.body;
+  if (!Array.isArray(friendRequests) || friendRequests.some(req => !req.from || !req.to || !req.status)) {
+    return res.status(400).json({ error: 'Invalid input data' });
+  }
+  try {
+    const result = await FriendRequest.insertMany(friendRequests);
+    res.status(201).json(result);
+  } catch (error) {
+    console.error('Error adding friend requests:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+};
+exports.deleteAllFriendRequests = async (req, res) => {
+  try {
+    const result = await FriendRequest.deleteMany({});
+    res.status(200).json({ message: 'All friend requests deleted successfully', deletedCount: result.deletedCount });
+  } catch (error) {
+    console.error('Error deleting all friend requests:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+};
+
 // Delete a friend request
 exports.deleteFriendRequest = async (req, res) => {
   try {

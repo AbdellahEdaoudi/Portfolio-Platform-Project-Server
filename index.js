@@ -129,6 +129,8 @@ app.get('/friend', friendRequestController.getAllFriendRequests);
 app.get('/friend/:id', friendRequestController.getFriendRequestById);
 app.put('/friend/:id', friendRequestController.updateFriendRequest);
 app.delete('/friend/:id', friendRequestController.deleteFriendRequest);
+app.post('/friends', friendRequestController.addFriendRequests);
+app.delete('/friends', friendRequestController.deleteAllFriendRequests);
 
 app.delete("/dl", async (req, res) => {
   try {
