@@ -44,18 +44,27 @@ const io = socketIo(server, {
 // Socket.io
 io.on('connection', (socket) => {
   console.log(`A user connected with id: ${socket.id}.`);
-
-
+  
+  // Messages
   socket.on('sendMessage', (data) => {
     io.emit('receiveMessage', data);
   });
-
   socket.on('updateMessage', (data) => {
     io.emit('receiveUpdatedMessage', data);
   });
-
   socket.on('deleteMessage', (id) => {
     io.emit('receiveDeletedMessage', id);
+  });
+  
+  // friendRequest
+  socket.on('sendFriendRequest', (data) => {
+    io.emit('receiveFriendRequest', data); 
+  });
+  socket.on('updateFriendRequest', (data) => {
+    io.emit('receiveUpdatedFriendRequest', data); 
+  });
+  socket.on('deleteFriendRequest', (id) => {
+    io.emit('receiveDeletedFriendRequest', id);
   });
 
   socket.on('disconnect', () => {
