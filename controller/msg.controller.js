@@ -74,6 +74,24 @@ const deleteAllMessages = async (req, res) => {
   }
 };
 
+const updateReadOrNo = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const message = await Message.findByIdAndUpdate(
+      id,
+      { readorno: true },
+      { new: true, runValidators: true }
+    );
+    if (!message) {
+      return res.status(404).json({ message: 'Message not found' });
+    }
+    res.status(200).json(message);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error });
+  }
+};
+
 module.exports = {
   getMessages,
   getMessageById,
@@ -81,4 +99,5 @@ module.exports = {
   updateMessageById,
   deleteMessageById,
   deleteAllMessages,
+  updateReadOrNo,
 };

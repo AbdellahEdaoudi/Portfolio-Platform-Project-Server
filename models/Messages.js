@@ -35,8 +35,8 @@ const MessageSchema = new mongoose.Schema({
     trim: true
   },
   readorno: {
-    type: String,
-    trim: true
+    type: Boolean,
+    default: false
   },
 }, { timestamps: true });
 
