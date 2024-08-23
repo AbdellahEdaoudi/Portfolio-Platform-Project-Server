@@ -34,6 +34,10 @@ const MessageSchema = new mongoose.Schema({
     type: String,
     trim: true
   },
+  readorno: {
+    type: String,
+    trim: true
+  },
 }, { timestamps: true });
 
 module.exports = mongoose.models.Message || mongoose.model('Message', MessageSchema);
