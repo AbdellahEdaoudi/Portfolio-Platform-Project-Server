@@ -84,10 +84,6 @@ const updateReadOrNoForMessages = async (req, res) => {
       { new: true, runValidators: true }
     );
 
-    if (result.matchedCount === 0) {
-      return res.status(404).json({ message: 'No messages found' });
-    }
-
     res.status(200).json({ message: 'Messages updated successfully', result });
   } catch (error) {
     res.status(500).json({ message: 'Server error', error });
