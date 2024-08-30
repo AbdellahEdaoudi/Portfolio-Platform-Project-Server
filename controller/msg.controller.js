@@ -75,11 +75,11 @@ const deleteAllMessages = async (req, res) => {
 };
 
 const updateReadOrNoForMessages = async (req, res) => {
-  const { fromEmail, toEmail } = req.body; // القيمتين يجب أن تأتي من الـ frontend
+  const { fromEmail, toEmail } = req.body;
 
   try {
     const result = await Message.updateMany(
-      { from: fromEmail, to: toEmail },
+      { from: fromEmail, to: toEmail ,readorno:false},
       { readorno: true },
       { new: true, runValidators: true }
     );
