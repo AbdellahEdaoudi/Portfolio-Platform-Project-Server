@@ -74,23 +74,26 @@ const deleteAllMessages = async (req, res) => {
   }
 };
 
-const updateReadOrNo = async (req, res) => {
-  const { id } = req.params;
+const updateReadOrNoForMessages = async (req, res) => {
+  const { fromEmail, toEmail } = req.body; // القيمتين يجب أن تأتي من الـ frontend
 
   try {
-    const message = await Message.findByIdAndUpdate(
-      id,
+    const result = await Message.updateMany(
+      { from: fromEmail, to: toEmail },
       { readorno: true },
       { new: true, runValidators: true }
     );
-    if (!message) {
-      return res.status(404).json({ message: 'Message not found' });
+
+    if (result.matchedCount === 0) {
+      return res.status(404).json({ message: 'No messages found' });
     }
-    res.status(200).json(message);
+
+    res.status(200).json({ message: 'Messages updated successfully', result });
   } catch (error) {
     res.status(500).json({ message: 'Server error', error });
   }
 };
+
 
 module.exports = {
   getMessages,
@@ -99,5 +102,5 @@ module.exports = {
   updateMessageById,
   deleteMessageById,
   deleteAllMessages,
-  updateReadOrNo,
+  updateReadOrNoForMessages,
 };

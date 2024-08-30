@@ -109,7 +109,7 @@ app.get('/messages', MessageController.getMessages);
 app.get('/messages/:id', MessageController.getMessageById);
 app.post('/messages', MessageController.createMessage);
 app.put('/messages/:id', MessageController.updateMessageById);
-app.put('/readorno/:id', MessageController.updateReadOrNo);
+app.put('/readorno', MessageController.updateReadOrNoForMessages);
 app.delete('/messages/:id', MessageController.deleteMessageById);
 app.delete('/messages', MessageController.deleteAllMessages);
 
