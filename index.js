@@ -19,6 +19,7 @@ const upload = require('./middleware/multer');
 const Links = require('./models/Links');
 const Contact = require('./models/Contacte');
 const Messages = require('./models/Messages');
+const isAuthenticated = require('./middleware/isAuthenticated');
 
 // const { createClient } = require('redis');
 
@@ -112,6 +113,7 @@ app.put('/messages/:id', MessageController.updateMessageById);
 app.put('/readorno', MessageController.updateReadOrNoForMessages);
 app.delete('/messages/:id', MessageController.deleteMessageById);
 app.delete('/messages', MessageController.deleteAllMessages);
+app.delete('/messages_B_U', MessageController.deleteMessagesBetweenUsers);
 
 // Links route 
 app.get('/links', LinksController.getAllLinks);

@@ -1,9 +1,9 @@
-const Message = require('../models/Messages');
+const Messages = require('../models/Messages');
 
 // Get all messages
-const getMessages = async (req, res) => {
+exports.getMessages = async (req, res) => {
   try {
-    const messages = await Message.find();
+    const messages = await Messages.find();
     res.status(200).json(messages);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -11,10 +11,10 @@ const getMessages = async (req, res) => {
 };
 
 // Get message by ID
-const getMessageById = async (req, res) => {
+exports.getMessageById = async (req, res) => {
   const { id } = req.params;
   try {
-    const message = await Message.findById({_id:id});
+    const message = await Messages.findById({_id:id});
     if (!message) {
       return res.status(404).json({ message: 'Message not found' });
     }
@@ -25,10 +25,10 @@ const getMessageById = async (req, res) => {
 };
 
 // Create a new message
-const createMessage = async (req, res) => {
+exports.createMessage = async (req, res) => {
   const messageData = req.body;
   try {
-    const newMessage = await Message.create(messageData);
+    const newMessage = await Messages.create(messageData);
     res.status(201).json(newMessage);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -36,11 +36,11 @@ const createMessage = async (req, res) => {
 };
 
 // Update message by ID
-const updateMessageById = async (req, res) => {
+exports.updateMessageById = async (req, res) => {
   const { id } = req.params;
   const messageData = req.body;
   try {
-    const updatedMessage = await Message.findByIdAndUpdate({_id:id}, messageData, { new: true });
+    const updatedMessage = await Messages.findByIdAndUpdate({_id:id}, messageData, { new: true });
     if (!updatedMessage) {
       return res.status(404).json({ message: 'Message not found' });
     }
@@ -51,10 +51,10 @@ const updateMessageById = async (req, res) => {
 };
 
 // Delete message by ID
-const deleteMessageById = async (req, res) => {
+exports.deleteMessageById = async (req, res) => {
   const { id } = req.params;
   try {
-    const deletedMessage = await Message.findByIdAndDelete({_id:id});
+    const deletedMessage = await Messages.findByIdAndDelete({_id:id});
     if (!deletedMessage) {
       return res.status(404).json({ message: 'Message not found' });
     }
@@ -65,20 +65,20 @@ const deleteMessageById = async (req, res) => {
 };
   
 // Delete all messages
-const deleteAllMessages = async (req, res) => {
+exports.deleteAllMessages = async (req, res) => {
   try {
-    const msg = await Message.deleteMany();
+    const msg = await Messages.deleteMany();
     res.status(200).json({ message: ` ${msg.deletedCount} : All messages deleted successfully`});
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
-const updateReadOrNoForMessages = async (req, res) => {
+exports.updateReadOrNoForMessages = async (req, res) => {
   const { fromEmail, toEmail } = req.body;
 
   try {
-    const result = await Message.updateMany(
+    const result = await Messages.updateMany(
       { from: fromEmail, to: toEmail ,readorno:false},
       { readorno: true },
       { new: true, runValidators: true }
@@ -89,14 +89,27 @@ const updateReadOrNoForMessages = async (req, res) => {
     res.status(500).json({ message: 'Server error', error });
   }
 };
-
-
-module.exports = {
-  getMessages,
-  getMessageById,
-  createMessage,
-  updateMessageById,
-  deleteMessageById,
-  deleteAllMessages,
-  updateReadOrNoForMessages,
+// Delete messages between two users if they exist
+exports.deleteMessagesBetweenUsers = async (req, res) => {
+  try {
+    const { Emailuser, FriendReq } = req.body;
+    const messagesExist = await Messages.findOne({
+      $or: [
+        { from: Emailuser, to: FriendReq },
+        { from: FriendReq, to: Emailuser }
+      ]
+    });
+    if (!messagesExist) {
+      return res.status(404).json({ success: false, message: 'No messages found between these users' });
+    }
+    const deleteMessages = await Messages.deleteMany({
+      $or: [
+        { from: Emailuser, to: FriendReq },
+        { from: FriendReq, to: Emailuser }
+      ]
+    });
+    res.status(200).json({ success: true, message: 'Messages between users deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
 };
