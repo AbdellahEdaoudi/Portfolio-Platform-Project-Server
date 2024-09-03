@@ -19,6 +19,7 @@ const upload = require('./middleware/multer');
 const Links = require('./models/Links');
 const Contact = require('./models/Contacte');
 const Messages = require('./models/Messages');
+const translate = require('translate-google');
 const isAuthenticated = require('./middleware/isAuthenticated');
 
 // const { createClient } = require('redis');
@@ -168,5 +169,44 @@ app.delete("/dm", async (req, res) => {
     res.status(200).json({ message: "All Messages have been deleted.", result });
   } catch (error) {
     res.status(500).json({ message: "An error occurred while deleting links.", error });
+  }
+});
+
+app.post('/translate', async (req, res) => {
+  try {
+    const { textObject, to } = req.body;
+
+    if (!textObject || !to) {
+      return res.status(400).json({ error: 'Text object and target language are required' });
+    }
+    if (typeof textObject !== 'object') {
+      return res.status(400).json({ error: 'Text object must be an object' });
+    }
+
+    const translations = {};
+    for (const [key, value] of Object.entries(textObject)) {
+      if (typeof value === 'string') {
+        // Skip translation for fields that look like CSS classes or color codes
+        if (/^bg-[a-zA-Z0-9-]+$/.test(value) || /^#[0-9A-Fa-f]{6}$/.test(value)) {
+          translations[key] = value;
+        } else {
+          try {
+            const translatedText = await translate(value, { to });
+            translations[key] = translatedText;
+          } catch (error) {
+            console.error(`Error translating ${key}:`, error.message);
+            translations[key] = value; // Fallback to original text
+          }
+        }
+      } else {
+        // Skip translation for non-string values
+        translations[key] = value;
+      }
+    }
+
+    res.status(200).json({ translations });
+  } catch (error) {
+    console.error('Server error:', error.message);
+    res.status(500).json({ error: 'Failed to translate text object' });
   }
 });
