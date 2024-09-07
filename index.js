@@ -97,55 +97,55 @@ mongoose.connect(process.env.MONGO_URL)
 
 
 // User Routes
-app.get('/users', UserController.getUsers);
-app.get('/users/:id', UserController.getUserById);
-app.get('/usersE/:email', UserController.getUserByEmail);
-app.get('/user/:username', UserController.getUserByFullname);
-app.post('/users', UserController.createUser);
-app.put('/users/:id', upload.single('urlimage'),UserController.updateUserById);
-app.put('/usersE/:email', UserController.updateUserByEmail);
-app.delete('/users/:id', UserController.deleteUserById);
+app.get('/users',isAuthenticated,UserController.getUsers);
+app.get('/users/:id',isAuthenticated,UserController.getUserById);
+app.get('/usersE/:email',isAuthenticated,UserController.getUserByEmail);
+app.get('/user/:username',isAuthenticated,UserController.getUserByFullname);
+app.post('/users',isAuthenticated,UserController.createUser);
+app.put('/users/:id',isAuthenticated, upload.single('urlimage'),UserController.updateUserById);
+app.put('/usersE/:email',isAuthenticated,UserController.updateUserByEmail);
+app.delete('/users/:id',isAuthenticated,UserController.deleteUserById);
 
 // Message routes
-app.get('/messages', MessageController.getMessages);
-app.get('/messages/:id', MessageController.getMessageById);
-app.post('/messages', MessageController.createMessage);
-app.put('/messages/:id', MessageController.updateMessageById);
-app.put('/readorno', MessageController.updateReadOrNoForMessages);
-app.delete('/messages/:id', MessageController.deleteMessageById);
-app.delete('/messages', MessageController.deleteAllMessages);
-app.delete('/messages_B_U', MessageController.deleteMessagesBetweenUsers);
+app.get('/messages',isAuthenticated,MessageController.getMessages);
+app.get('/messages/:id',isAuthenticated,MessageController.getMessageById);
+app.post('/messages',isAuthenticated,MessageController.createMessage);
+app.put('/messages/:id',isAuthenticated,MessageController.updateMessageById);
+app.put('/readorno',isAuthenticated,MessageController.updateReadOrNoForMessages);
+app.delete('/messages/:id',isAuthenticated,MessageController.deleteMessageById);
+app.delete('/messages',isAuthenticated,MessageController.deleteAllMessages);
+app.delete('/messages_B_U',isAuthenticated,MessageController.deleteMessagesBetweenUsers);
 
 // Links route 
-app.get('/links', LinksController.getAllLinks);
-app.get('/links/:id', LinksController.getLinkById);
-app.post('/links', LinksController.createLink);
-app.put('/links/:id', LinksController.updateLink);
-app.delete('/links/:id', LinksController.deleteLink);
+app.get('/links',isAuthenticated,LinksController.getAllLinks);
+app.get('/links/:id',isAuthenticated,LinksController.getLinkById);
+app.post('/links',isAuthenticated,LinksController.createLink);
+app.put('/links/:id',isAuthenticated,LinksController.updateLink);
+app.delete('/links/:id',isAuthenticated,LinksController.deleteLink);
 
 // Contact Routes
-app.get('/contacts', ContacteController.getContacts);
-app.get('/contacts/:id', ContacteController.getContactById);
-app.post('/contacts', ContacteController.createContact);
-app.put('/contacts/:id', ContacteController.updateContactById);
-app.delete('/contacts/:id', ContacteController.deleteContactById);
+app.get('/contacts',isAuthenticated,ContacteController.getContacts);
+app.get('/contacts/:id',isAuthenticated,ContacteController.getContactById);
+app.post('/contacts',isAuthenticated,ContacteController.createContact);
+app.put('/contacts/:id',isAuthenticated,ContacteController.updateContactById);
+app.delete('/contacts/:id',isAuthenticated,ContacteController.deleteContactById);
 
 // Admin Routes
-app.post('/register', AdmineController.registerAdmin);
-app.post('/login', AdmineController.loginAdmin);
-app.get('/admin', AdmineController.getAllAdmins);
-app.delete('/admin/:id', AdmineController.deleteAdminById);
+app.post('/register',isAuthenticated,AdmineController.registerAdmin);
+app.post('/login',isAuthenticated,AdmineController.loginAdmin);
+app.get('/admin',isAuthenticated,AdmineController.getAllAdmins);
+app.delete('/admin/:id',isAuthenticated,AdmineController.deleteAdminById);
 
 // Friends Routes
-app.post('/friend', friendRequestController.createFriendRequest);
-app.get('/friend', friendRequestController.getAllFriendRequests);
-app.get('/friend/:id', friendRequestController.getFriendRequestById);
-app.put('/friend/:id', friendRequestController.updateFriendRequest);
-app.delete('/friend/:id', friendRequestController.deleteFriendRequest);
-app.post('/friends', friendRequestController.addFriendRequests);
-app.delete('/friends', friendRequestController.deleteAllFriendRequests);
+app.post('/friend',isAuthenticated,friendRequestController.createFriendRequest);
+app.get('/friend',isAuthenticated,friendRequestController.getAllFriendRequests);
+app.get('/friend/:id',isAuthenticated,friendRequestController.getFriendRequestById);
+app.put('/friend/:id',isAuthenticated,friendRequestController.updateFriendRequest);
+app.delete('/friend/:id',isAuthenticated,friendRequestController.deleteFriendRequest);
+app.post('/friends',isAuthenticated,friendRequestController.addFriendRequests);
+app.delete('/friends',isAuthenticated,friendRequestController.deleteAllFriendRequests);
 
-app.delete("/dl", async (req, res) => {
+app.delete("/dl",isAuthenticated, async (req, res) => {
   try {
     const result = await Links.deleteMany({});
     res.status(200).json({ message: "All links have been deleted.", result });
@@ -154,7 +154,7 @@ app.delete("/dl", async (req, res) => {
   }
 });
 
-app.delete("/dc", async (req, res) => {
+app.delete("/dc",isAuthenticated,async (req, res) => {
   try {
     const result = await Contact.deleteMany({});
     res.status(200).json({ message: "All Contact have been deleted.", result });
@@ -163,7 +163,7 @@ app.delete("/dc", async (req, res) => {
   }
 });
 
-app.delete("/dm", async (req, res) => {
+app.delete("/dm",isAuthenticated,async (req, res) => {
   try {
     const result = await Messages.deleteMany({});
     res.status(200).json({ message: "All Messages have been deleted.", result });
@@ -172,7 +172,7 @@ app.delete("/dm", async (req, res) => {
   }
 });
 
-app.post('/translate', async (req, res) => {
+app.post('/translate',isAuthenticated,async (req, res) => {
   try {
     const { textObject, to } = req.body;
 
