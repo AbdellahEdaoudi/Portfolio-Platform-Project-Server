@@ -38,7 +38,7 @@ const isAuthenticated = require('./middleware/isAuthenticated');
 app.use(cors());
 const io = socketIo(server, {
   cors: {
-    origin: "*",
+    origin: "https://linkerfolio.vercel.app",
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
   }
 });
@@ -80,7 +80,7 @@ server.listen(PORT, () => {
 });
 
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'https://linkerfolio.vercel.app');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   res.setHeader('Access-Control-Allow-Credentials', 'true');
