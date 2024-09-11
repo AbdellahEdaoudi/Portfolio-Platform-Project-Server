@@ -38,8 +38,11 @@ const isAuthenticated = require('./middleware/isAuthenticated');
 // app.use(cors());
 
 app.use(cors({
-  origin: 'https://linkerfolio.vercel.app'
+  origin: 'https://linkerfolio.vercel.app',
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+  credentials: true
 }));
+
 const io = socketIo(server, {
   cors: {
     origin: "https://linkerfolio.vercel.app",
