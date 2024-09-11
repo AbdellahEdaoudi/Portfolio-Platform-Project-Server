@@ -35,7 +35,11 @@ const isAuthenticated = require('./middleware/isAuthenticated');
 // client.connect(console.log("Connect To Reddis")).catch(console.error);
 
 
-app.use(cors());
+// app.use(cors());
+
+app.use(cors({
+  origin: 'https://linkerfolio.vercel.app'
+}));
 const io = socketIo(server, {
   cors: {
     origin: "https://linkerfolio.vercel.app",
