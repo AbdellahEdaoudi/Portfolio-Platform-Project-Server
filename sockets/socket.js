@@ -1,19 +1,17 @@
 // sockets/socket.js
 const User = require("../models/User");
 
-// Map لتخزين المستخدمين المتصلين: email -> socket.id
 const onlineUsers = new Map();
 
 function socketHandler(io) {
   io.on("connection", (socket) => {
     console.log(`🔌 New connection: ${socket.id}`);
 
-    // عند اتصال المستخدم
     socket.on("userConnected", async (email) => {
       if (!email) return console.error("Email is undefined, cannot update user status.");
 
-      socket.email = email; // حفظ البريد على الـ socket
-      onlineUsers.set(email, socket.id); // إضافة للمستخدمين المتصلين
+      socket.email = email;
+      onlineUsers.set(email, socket.id);
 
       try {
         await User.findOneAndUpdate({ email }, { isOnline: true });
@@ -23,14 +21,12 @@ function socketHandler(io) {
       }
     });
 
-    // الرسائل
     socket.on("sendMessage", (data) => {
       const { to } = data;
       const receiverSocketId = onlineUsers.get(to);
       if (receiverSocketId) {
-        io.to(receiverSocketId).emit("receiveMessage", data); // فقط للمستلم
+        io.to(receiverSocketId).emit("receiveMessage", data);
       }
-      // لا حاجة لإرسال للمرسل لأنه يحدّث واجهته مباشرة
     });
 
     socket.on("updateMessage", (data) => {
@@ -49,7 +45,6 @@ function socketHandler(io) {
       }
     });
 
-    // طلبات الصداقة
     socket.on("sendFriendRequest", (data) => {
       const { to } = data;
       const receiverSocketId = onlineUsers.get(to);
@@ -59,8 +54,8 @@ function socketHandler(io) {
     });
 
     socket.on("updateFriendRequest", (data) => {
-      const { to } = data;
-      const receiverSocketId = onlineUsers.get(to);
+      const { from } = data;
+      const receiverSocketId = onlineUsers.get(from);
       if (receiverSocketId) {
         io.to(receiverSocketId).emit("receiveUpdatedFriendRequest", data);
       }
@@ -74,10 +69,9 @@ function socketHandler(io) {
       }
     });
 
-    // عند قطع الاتصال
     socket.on("disconnect", async () => {
       if (socket.email) {
-        onlineUsers.delete(socket.email); // إزالة المستخدم من المتصلين
+        onlineUsers.delete(socket.email);
         try {
           await User.findOneAndUpdate({ email: socket.email }, { isOnline: false });
           console.log(`❌ User ${socket.email} is offline.`);
