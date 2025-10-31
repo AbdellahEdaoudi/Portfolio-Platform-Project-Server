@@ -38,10 +38,10 @@ function socketHandler(io) {
     });
 
     socket.on("deleteMessage", (data) => {
-      const { to, id } = data;
+      const {to} = data;
       const receiverSocketId = onlineUsers.get(to);
       if (receiverSocketId) {
-        io.to(receiverSocketId).emit("receiveDeletedMessage", id);
+        io.to(receiverSocketId).emit("receiveDeletedMessage", data);
       }
     });
 
